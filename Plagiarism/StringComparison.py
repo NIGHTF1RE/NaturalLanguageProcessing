@@ -44,7 +44,7 @@ def dice_coefficient(a,b):
 
 class StringComparison:
 
-    def __init__(self, testString, sourceString):
+    def __init__(self, testString=None, sourceString=None):
 
         self.testString = testString
         self.sourceString = sourceString
@@ -54,10 +54,18 @@ class StringComparison:
 
         self.SpacyPipe = spacy.load('en_core_web_trf',exclude=['textcat'])
 
+    def importData(self, testfile, sourcefile):
+
+        with open(testfile, 'r', encoding='utf8') as f:
+            self.testString = f.read()
+
+        with open(sourcefile, 'r', encoding='utf8') as f:
+            self.sourceString = f.read()
+
     def Tokenize(self):
 
-        self.testWordList = [item.text for item in self.SpacyPipe(self.testString)]
-        self.sourceWordList = [item.text for item in self.SpacyPipe(self.sourceString)]
+        self.testWordList = [item.text.lower() for item in self.SpacyPipe(self.testString)]
+        self.sourceWordList = [item.text.lower() for item in self.SpacyPipe(self.sourceString)]
 
     def ExactMatches(self, min_n=4, max_n=50):
 
@@ -67,7 +75,7 @@ class StringComparison:
         for i in range(min_n,max_n+1):
             detected = False
             tempTest = [self.testWordList[j:j+i] for j in range(len(self.testWordList)-i)]
-            tempSource = [self.SourceWordList[j:j+i] for j in range(len(self.SourceWordList)-i)]
+            tempSource = [self.sourceWordList[j:j+i] for j in range(len(self.sourceWordList)-i)]
 
             for item in tempTest:
                 if item in tempSource:
@@ -82,13 +90,15 @@ class StringComparison:
             templist = [i for i in matchlist if not i==item]
             boo = True
             for item2 in templist:
-                if item in item2:
+                if ' '.join(item) in ' '.join(item2):
                     boo=False
                 
             if boo:
                 longMatches.append(item)
 
-    def SimilarMatches(self, min_n=7,max_n=50,threshold=0.8, q=2):
+        [print(i) for i in longMatches]
+
+    def SimilarMatches(self, min_n=7,max_n=40,threshold=0.8, q=2):
 
         matchTest = []
         matchSource = []
@@ -97,8 +107,8 @@ class StringComparison:
         
         for i in range(min_n,max_n+1):
             detected = False
-            tempTest = [self.testWordList[j:j+i] for j in range(len(self.testWordList)-i)]
-            tempSource = [self.SourceWordList[j:j+i] for j in range(len(self.SourceWordList)-i)]
+            tempTest = [self.testWordList[j:j+i] for j in range(2,len(self.testWordList)-i,6)]
+            tempSource = [self.sourceWordList[j:j+i] for j in range(2,len(self.sourceWordList)-i,6)]
 
             for item in tempTest:
                 for item2 in tempSource:
@@ -115,7 +125,7 @@ class StringComparison:
             templist = [i for i in matchTest if not i==item]
             boo = True
             for item2 in templist:
-                if item in item2:
+                if ' '.join(item) in ' '.join(item2):
                     boo=False
                 
             if boo:
@@ -125,18 +135,22 @@ class StringComparison:
             templist = [i for i in matchSource if not i==item]
             boo = True
             for item2 in templist:
-                if item in item2:
+                if ' '.join(item) in ' '.join(item2):
                     boo=False
                 
             if boo:
                 longSourceMatches.append(item)
 
+        [print(i) for i in longTestMatches]
+
     def SemanticSentenceMatches(self, threshold=0.85):
 
         model = ST('all-MiniLM-L6-v2')
         
-        testSentences = [item.text for item in self.SpacyPipe(self.testString)]
-        sourceSentences = [item.text for item in self.SpacyPipe(self.sourceString)]
+        testSentences = [item.text for item in self.SpacyPipe(self.testString).sents]
+        sourceSentences = [item.text for item in self.SpacyPipe(self.sourceString).sents]
+
+        print(testSentences)
 
         testEncodes = model.encode(testSentences, convert_to_numpy=True, normalize_embeddings=True)
         sourceEncodes = model.encode(sourceSentences, convert_to_numpy=True, normalize_embeddings=True)
@@ -150,6 +164,8 @@ class StringComparison:
 
         testMatches = [testSentences[i] for i in testIndicies]
         sourceMatches = [sourceSentences[i] for i in sourceIndicies]
+
+        [print(testMatches[i],sourceMatches[i]) for i in range(len(testMatches))]
 
 
 
