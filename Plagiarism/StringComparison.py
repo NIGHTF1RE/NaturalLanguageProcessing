@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Apr 15 11:07:59 2023
-
-@author: Mark Chlarson
-"""
 
 import re
 from sentence_transformers import SentenceTransformer as ST
 import spacy
 import numpy as np
 
+# This is a neat bit of code I found for running this. There are likely more
+# efficient packages out there.
 def dice_coefficient(a,b):
     if not len(a) or not len(b): return 0.0
     """ quick case for true duplicates """
@@ -42,6 +39,7 @@ def dice_coefficient(a,b):
     score = float(matches)/float(lena + lenb)
     return score
 
+# And now we're back to things being written by me
 class StringComparison:
 
     def __init__(self, testString=None, sourceString=None):
@@ -67,6 +65,8 @@ class StringComparison:
         self.testWordList = [item.text.lower() for item in self.SpacyPipe(self.testString)]
         self.sourceWordList = [item.text.lower() for item in self.SpacyPipe(self.sourceString)]
 
+    # Does exactly what it says and looks for exact matches.
+    # It displays the longest match it finds.
     def ExactMatches(self, min_n=4, max_n=50):
 
         matchlist = []
