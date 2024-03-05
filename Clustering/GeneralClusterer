@@ -102,7 +102,11 @@ class TextCluster:
                 pca.fit_transform(temp)
         
         Encodings = temp
-        
+
+        # This is a grossly inefficient abuse of Pandas. That said, it has the benefit
+        # of circumventing any behavior related to how Pandas struggles to write lists
+        # of lists (or equivalent arrays) to columns, and it is so relatively fast compared
+        # to the embedding process that it isn't important.
         for i in self.data.index:
             self.data.at[i,'Encodings'] = Encodings[i]
         
@@ -123,7 +127,8 @@ class TextCluster:
         # your minimum samples should probably be higher if you use DBSCAN
         # but that is for the users to know or learn.
         ms = max(len(self.data)*self.min_samp_frac,self.min_samp)
-            
+
+        # Could potentially add more options here. Also, yes, my choice of 
         if self.clustering.lower() == 'optics':
             DB = CLU.OPTICS(min_samples = int(ms), xi=self.xi, max_eps=self.max_eps, metric=self.metric)
         else:
@@ -205,7 +210,7 @@ class TextCluster:
         self.RVData['Similarities'] = None
         
         # Why do I use sklearn's pairwise_distance here but scipy's cdist other
-        # places. That is a good question
+        # places. That is a good question.
         Dists = pairwise_distances(np.array(self.RVdata['RepresentativeVector'].tolist()), metric='cosine')
         
         # This helps to set boundaries for clusters. having self.DistFrac<0.5 
@@ -227,7 +232,10 @@ class TextCluster:
             Embeddings = self.data['Encodings'].tolist()
             
             # Calculates the similarity of each individual text embedding. This
-            # not only allows us to 
+            # not only allows us to filter what should be associated with a particular
+            # label, but also a way to rank those by the most related. Now, as mentioned
+            # above, the center of a "cluster" may actually be somewhat sparse if
+            # clusters were merged, but we'll consider it good enough.
             self.data['Similarity'] = [CS(Vec, Embed) for Embed in Embeddings]
             
             tempDF = self.data[self.data['Similarity']>MinSim]
@@ -239,6 +247,10 @@ class TextCluster:
         return self.RVdata
         
     def FindTopicWords(self):
+
+        # This function adds the top ten topic words, using an algorithm that is
+        # absolutely horrendous and could likely be replaced by a much simpler
+        # TF-IDF algorithm.
         
         SPACYpiplin = spacy.load("en_core_web_lg", disable=['parser', 'ner'])
         
@@ -246,7 +258,7 @@ class TextCluster:
         
         WholeDoc = SPACYpiplin.pipe(self.data['EmbeddingInputs'].tolist())
         WholeRec = ' '.join([' '.join([token.lemma_ for token in doc if not token.is_stop]) for doc in WholeDoc])
-        
+
         CV = CountVectorizer(decode_error='ignore')
         
         X0 = CV.fit_transform([WholeRec]).toarray()
@@ -255,11 +267,12 @@ class TextCluster:
         
         for label in self.RVdata['label']:
                    
-            LabelDoc = SPACYpiplin.pipe(self.data[self.data['labels']==label]['EmbeddingInputs'].tolist())
+            LabelDoc = SPACYpiplin.pipe(self.data.loc[self.data['labels']==label,'EmbeddingInputs'].tolist())
             
             LabelRec = ' '.join([' '.join([token.lemma_ for token in doc if not token.is_stop]) for doc in LabelDoc])
             
             CV = CountVectorizer(decode_error='ignore', vocabulary=vocab)
+
             
             X = CV.fit_transform([LabelRec]).toarray()
             Ratios =  np.divide(X[0],X0[0])
