@@ -107,7 +107,7 @@ def MLM_Continued_Pretraining(InputTextList:list, modelSavePath:str, trainingEpo
         jit_compile=True,
     )
     
-    # Pretrain on our inputs
+    # Pretrain on whatever our inputs are
     pretrainingModel.fit(
         PPTrainDS,
         validation_data=PPValDS,
