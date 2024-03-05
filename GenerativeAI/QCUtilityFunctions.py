@@ -36,7 +36,7 @@ def NGramRepeatedFraction(String, n):
     return sum([i for i in a if i>1])/sum(a)
 
 
-# This function takes a string and compares the unique pair to each other. It can help
+# This function takes a string and compares the unique pairs of sentences to each other. It can help
 # note patterns of semantic repetition that may be missed by repeated ngrams (aka,
 # you couldn't beat it with just a thesaurus). However, it is significantly slower and
 # has a number of othe quirks, many of which are explained within the function.
@@ -50,7 +50,7 @@ def SelfSimilarity(String, WordsForRemoval=[], Threshold=0.7, CrossEncode=False,
     String = re.sub('|'.join(WordsForRemoval),'',String)
     String = re.sub(' +',' ',String)
     
-    # Quick and dirty sentnece splits on likely tokens. Suffers from certain titles,
+    # Quick and dirty sentence splits on likely tokens. Suffers from certain titles,
     # abbreviations, and other relatively uncommon grammar and syntax. If these are 
     # expected to be common, it is likely better to use a more thorough method of
     # splitting, such as a spaCy sentencizer.
@@ -59,13 +59,13 @@ def SelfSimilarity(String, WordsForRemoval=[], Threshold=0.7, CrossEncode=False,
     
     # Punctuation has a small but consistent effect that causes sentences to 
     # score as more related when using embedding and cosine similarity. This
-    # effect does not appear as strong for cross-encoding.
+    # effect does not appear to be as strong for cross-encoding.
     #Sents = [s.translate(str.maketrans('','',string.punctuation)) for s in Sents]
     
     # Again, a quick and dirty way to ensure that sentences are meaningful. Similar
     # to the sentnence splitting, doing this cutoff by word might be more effective.
     # However, that is really only a problem if you are using very large words that
-    # let you hit the 25 character threshold without saying much. It is also worth
+    # let you hit the 25-character threshold without saying much. It is also worth
     # noting that what exactly this threshold should be likely largely depends on
     # the content.
     Sents = [re.sub('\A\W*','',s) for s in Sents if len(s)>25]
