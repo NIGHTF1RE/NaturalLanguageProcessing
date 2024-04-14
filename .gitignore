@@ -130,3 +130,13 @@ dmypy.json
 
 # Data Stored
 data/
+Data/
+
+pytorch/FirstAttempts/Data/MLB2017to2021.csv
+pytorch/FirstAttempts/Data/PlayerIDMap.csv
+
+
+# Generic JSONs and CSVs
+*.json
+*.csv
+
