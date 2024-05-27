@@ -20,3 +20,6 @@ This currently just a collection of uitility functions useful in detecting plagi
 
 ### ModelTrainingAndTuning
 An old piece of code that I wrote to continue the mask word training for a BERT model. Very interesting in to use to adapt BERT to domain specific knowledge before actual fine tuning.
+
+### pytorch
+Currently trying to get a better grasp on the Torch framework for future growth. Feel free to peruse if you want to see what I'm learning, but nothing in here is "production ready"
