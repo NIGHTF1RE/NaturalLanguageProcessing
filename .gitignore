@@ -140,3 +140,7 @@ pytorch/FirstAttempts/Data/PlayerIDMap.csv
 *.json
 *.csv
 
+# Folders not yet ready for portfolio
+*/pyspark
+*/hadoop
+
