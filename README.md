@@ -1,6 +1,8 @@
 # Welcome to my GitHub portfolio!
 
-Here, you will find a collection of my projects and contributions, showcasing my skills and passion for software development. Each repository is a testament to my commitment to writing clean, efficient code and my ability to solve complex problems. Many parts of the portfolio demonstrate final products, unless of course I am currently working on something. Others, however, may simply be me learning certain techniques and frameworks. I specify which is which below. Thank you for visiting, and I look forward to connecting with you!
+[Most recent completed project](https://github.com/NIGHTF1RE/Portfolio/tree/main/One-Shot%20Notebooks/Hotel%20Cancellations) and associated [presentation](https://docs.google.com/presentation/d/19-8qKiQA4yhinbKLD3q16CXiZxnUNtlEm61ytuVKvPw/edit#slide=id.p)
+
+Here, you will find a collection of my projects and contributions, showcasing my skills and passion for data science and anlystics. Many parts of the portfolio demonstrate final products, unless of course I am currently working on something. Others, however, may simply be me learning certain techniques and frameworks. I specify which is which below. Thank you for visiting, and I look forward to connecting with you!
 
 ## AI notice
 
@@ -21,5 +23,5 @@ This currently just a collection of uitility functions useful in detecting plagi
 ### ModelTrainingAndTuning
 An old piece of code that I wrote to continue the mask word training for a BERT model. Very interesting in to use to adapt BERT to domain specific knowledge before actual fine tuning.
 
-### pytorch
-Currently trying to get a better grasp on the Torch framework for future growth. Feel free to peruse if you want to see what I'm learning, but nothing in here is "production ready"
+### PySpark
+Illustration of some basic techniques used for distributed data processing.
