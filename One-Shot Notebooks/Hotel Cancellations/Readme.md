@@ -1,0 +1,3 @@
+The associated presentation for this work can be found (here)[https://docs.google.com/presentation/d/19-8qKiQA4yhinbKLD3q16CXiZxnUNtlEm61ytuVKvPw/edit#slide=id.g2e7b6a2bfbe_0_315]. This presentation is targeted at a general audience, although somebody with technical knowledge would need to be presenting. The slide deck is not meant to be a standalone document, and I would not expect somebody without a technical background to read it, and especially the second half, and fully understand the information. 
+
+This project shows basic EDA techniques, model tuning techniques, and how we can use models with Monte Carlo simulation to make better predictions about aggregate behavior.
